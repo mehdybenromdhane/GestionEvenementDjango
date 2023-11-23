@@ -23,6 +23,18 @@ class Event (models.Model):
     organisateur = models.ForeignKey(Person , on_delete=models.SET_NULL , null=True)
     participant = models.ManyToManyField(Person, through="Participants" , related_name="participant")
 
+
+    class Meta:
+        constraints =[
+
+            models.CheckConstraint(check=models.Q(
+            evt_date__gt= datetime.now()
+
+            ), name = "Please check date event")
+       
+       
+        ]
+
     def __str__(self):
         return self.title
 
@@ -36,4 +48,4 @@ class Participants(models.Model):
         unique_together=[['person','event']]
        
     def __str__(self):
-        return self.participation_date
+        return str(self.participation_date)

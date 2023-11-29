@@ -9,4 +9,4 @@ from .models import Person
 class PersonAdmin(admin.ModelAdmin):
     
     list_display=("username", "email" , "cin" , "last_login")
-    search_fields=["username"]
+    search_fields=('email',)

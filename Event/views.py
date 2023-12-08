@@ -1,11 +1,16 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render,redirect
 
-from .models import Event
+from .models import Event,Participants
 from django.http import HttpResponse
 from .forms import EventForm
 from django.views.generic import *
 # Create your views here.
 from django.urls import reverse_lazy
+
+
+from Person.models import Person
 
 def hello (request , name):
 
@@ -18,10 +23,10 @@ def hello (request , name):
 
 def listEvent(request):
 
-    list = Event.objects.all().order_by('-evt_date')
+    list = Event.objects.filter(state=True).order_by('-evt_date')
 
 
-    nbr_event = Event.objects.count()
+    nbr_event = Event.objects.filter(state=True).count()
 
 
     return render(request , 'event/list.html', { 'list':list , 'nbr':nbr_event} )
@@ -35,16 +40,19 @@ class ListEvents(ListView):
     context_object_name = "list"
 
 
+    def get_queryset(self):
+        list = Event.objects.filter(state=True)
+        return list
+
+        
 
 
 
 
-def detailsEvent(req , ide ):
-    event = Event.objects.get(id=ide)
 
-    c = {"event":event}
 
-    return render (req , "event/details.html" , c)
+
+
 
 
 
@@ -53,6 +61,27 @@ class Details(DetailView):
     template_name="event/details.html"
     context_object_name="event"
 
+
+
+def detailEvent(req,ide): 
+
+     event=  Event.objects.get(id=ide)
+     user = Person.objects.get(cin=1144)
+
+
+     button =False
+     participant = Participants.objects.filter(person = user, event=event)
+
+     if participant:
+         button=True
+     else:
+         button=False
+
+    
+
+
+
+     return render(req, "event/detailsEventFc.html" , {'evenement':event , 'btn':button})
 
 
 def addEvent(req):
@@ -81,6 +110,13 @@ class Add(CreateView):
 
 
 
+class Update(UpdateView):
+
+    model= Event
+    template_name = "event/update.html"
+    form_class = EventForm
+    success_url =  reverse_lazy('listEvent')
+
 
 class deleteEvent(DeleteView):
 
@@ -91,3 +127,48 @@ class deleteEvent(DeleteView):
 
 
 
+def delete(req,ide):
+
+    event=  Event.objects.get(id=ide)
+
+    if event:
+        event.delete()
+
+    
+    return redirect("listEvent")
+
+
+
+
+def participer(req,id):
+
+    event = Event.objects.get(id=id)
+    user = Person.objects.get(cin=1144)
+
+    if user: 
+        participant = Participants.objects.create(person = user , event= event)
+        participant.save()
+
+        event.nbr_paticipants += 1
+
+        event.save()
+
+    return redirect("listEvent")
+
+
+
+
+def cancel(req,id):
+
+    event = Event.objects.get(id=id)
+    user = Person.objects.get(cin=1144)
+
+    if user: 
+        participant = Participants.objects.filter(person = user , event= event)
+        participant.delete()
+
+        event.nbr_paticipants -= 1
+
+        event.save()
+
+    return redirect("listEvent")

@@ -42,10 +42,8 @@ class Participants(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
-    participation_date = models.DateTimeField(datetime.now())
+    participation_date = models.DateTimeField(datetime.now() , null=True , auto_now_add=True)
      
     class Meta:
-        unique_together=[['person','event']]
+        unique_together=['person','event']
        
-    def __str__(self):
-        return str(self.participation_date)

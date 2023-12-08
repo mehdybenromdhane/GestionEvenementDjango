@@ -4,6 +4,8 @@
 
 
 
+
+
 {% block body %}
 
 
@@ -25,11 +27,13 @@
   
         <p class="card-text">{{p.description}}</p>
   
-        <a href="{% url 'detailsEvent' p.id  %}" class="btn btn-primary">View Details</a>
+
+        <a href="{% url 'detailEvent' p.id  %}" class="btn btn-primary">View Details</a>
         <a href=" " class="btn btn-warning">Update</a>
   
         <a href=" {% url 'delete' p.id %} " class="btn btn-danger">Delete</a>
-  
+        <a href=" {% url 'deleteEvent' p.id %} " class="btn btn-warning">Delete with function</a>
+
       </div>
       <div class="card-footer">
         <small class="text-muted">{{p.evt_date}}</small>

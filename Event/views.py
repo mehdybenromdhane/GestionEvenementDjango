@@ -66,11 +66,14 @@ class Details(DetailView):
 def detailEvent(req,ide): 
 
      event=  Event.objects.get(id=ide)
-     user = Person.objects.get(cin=1144)
+     user = req.user
 
 
      button =False
      participant = Participants.objects.filter(person = user, event=event)
+
+
+
 
      if participant:
          button=True
@@ -81,7 +84,7 @@ def detailEvent(req,ide):
 
 
 
-     return render(req, "event/detailsEventFc.html" , {'evenement':event , 'btn':button})
+     return render(req, "event/detailsEventFc.html" , {'evenement':event , 'btn':button })
 
 
 def addEvent(req):

@@ -1,3 +1,10 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+from django.contrib.auth.views import LoginView
+
+from django.urls import reverse_lazy
+
+class CustomLoginView(LoginView):
+    def get_success_url(self):
+        return reverse_lazy('listEvent')

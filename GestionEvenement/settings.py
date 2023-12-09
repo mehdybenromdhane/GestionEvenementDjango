@@ -51,6 +51,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+
 ROOT_URLCONF = 'GestionEvenement.urls'
 
 TEMPLATES = [
@@ -133,3 +135,7 @@ AUTH_USER_MODEL = 'Person.Person'
 MEDIA_URL='/media/'
 
 MEDIA_ROOT = 'media'
+
+
+LOGOUT_REDIRECT_URL = '/event/listEvent'
+

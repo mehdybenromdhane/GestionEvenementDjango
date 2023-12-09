@@ -46,17 +46,30 @@
             </ul>
           </div>
   
-          <a class="navbar-brand" href="#">welcome</a>
+
+          
   
        
+
+          {% if user.is_authenticated %}
+
+          <a class="navbar-brand" href="#">welcome {{user}}</a>
+
+          <a href="{% url 'logout' %}" type="submit" class="btn btn-warning mx-2"
+          >Logout</a
+        >
   
-          <a href="#" type="submit" class="btn btn-primary mx-2"
+
+        {% else %}
+          <a href="{% url 'login' %}" type="submit" class="btn btn-primary mx-2"
             >login</a
           >
+
+      
+          <a href="" type="submit" class="btn btn-success">register</a>
   
-          <a href=" " type="submit" class="btn btn-success">register</a>
-  
-        
+
+          {% endif %}
         </div>
     
         </nav>
